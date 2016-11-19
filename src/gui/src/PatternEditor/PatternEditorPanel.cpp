@@ -615,10 +615,10 @@ void PatternEditorPanel::gridResolutionChanged( QString str )
 	}
 
 	//INFOLOG( to_string( nResolution ) );
-	m_pDrumPatternEditor->setResolution( nResolution, bUseTriplets );
-	m_pPianoRollEditor->setResolution( nResolution, bUseTriplets );
+	m_pDrumPatternEditor->setResolution( nResolution * 4, bUseTriplets );
+	m_pPianoRollEditor->setResolution( nResolution * 4, bUseTriplets );
 
-	Preferences::get_instance()->setPatternEditorGridResolution( nResolution );
+	Preferences::get_instance()->setPatternEditorGridResolution( nResolution * 4 );
 	Preferences::get_instance()->setPatternEditorUsingTriplets( bUseTriplets );
 }
 
@@ -638,9 +638,9 @@ void PatternEditorPanel::selectedPatternChangedEvent()
 
 		// update pattern size combobox
 		int nPatternSize = m_pPattern->get_length();
-		int nEighth = MAX_NOTES / 8;
+		int nQuarter = MAX_NOTES / 4;
 		for ( int i = 1; i <= 32; i++ ) {
-			if ( nPatternSize == nEighth * i ) {
+			if ( nPatternSize == nQuarter * i ) {
 				__pattern_size_combo->set_text( QString( "%1" ).arg( i ) );
 				break;
 			}
@@ -819,30 +819,30 @@ void PatternEditorPanel::zoomOutBtnClicked(Button *ref)
 
 void PatternEditorPanel::patternSizeChanged( QString str )
 {
-	INFOLOG( "pattern size changed" );
+	INFOLOG( "pattern size changed: " + str );
 
-	uint nEighth = MAX_NOTES / 8;
+	uint nQuarter = MAX_NOTES / 4;
 	int nSelected = str.toInt();
 
 	if ( !m_pPattern ) {
 		return;
 	}
 
-	if ( m_pPattern->get_length() == nEighth * nSelected ) {
+	if ( m_pPattern->get_length() == nQuarter * nSelected ) {
 		// non e' necessario aggiornare
 		return;
 	}
 
 
 	if ( !m_bEnablePatternResize ) {
-		__pattern_size_combo->set_text(QString::number(m_pPattern->get_length() / nEighth ),false);
+		__pattern_size_combo->set_text(QString::number(m_pPattern->get_length() / nQuarter ),false);
 		QMessageBox::information( this, "Hydrogen", trUtf8( "Is not possible to change the pattern size when playing." ) );
 		return;
 	}
 
 
 	if ( nSelected > 0 && nSelected <= 32 ) {
-		m_pPattern->set_length( nEighth * nSelected );
+		m_pPattern->set_length( nQuarter * nSelected );
 	}
 	else {
 		ERRORLOG( QString("[patternSizeChanged] Unhandled case %1").arg( nSelected ) );
