@@ -614,9 +614,9 @@ void PatternEditorPanel::gridResolutionChanged( QString str )
 		nResolution = str.toInt();
 	}
 
-	//INFOLOG( to_string( nResolution ) );
-	m_pDrumPatternEditor->setResolution( nResolution * 4, bUseTriplets );
-	m_pPianoRollEditor->setResolution( nResolution * 4, bUseTriplets );
+	//INFOLOG( "Resolution changed to:" + QString::number(nResolution) + " (" + str + ")"  );
+	m_pDrumPatternEditor->setResolution( nResolution , bUseTriplets );
+	m_pPianoRollEditor->setResolution( nResolution , bUseTriplets );
 
 	Preferences::get_instance()->setPatternEditorGridResolution( nResolution * 4 );
 	Preferences::get_instance()->setPatternEditorUsingTriplets( bUseTriplets );
